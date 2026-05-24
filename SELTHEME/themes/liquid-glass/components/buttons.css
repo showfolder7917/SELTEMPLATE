@@ -1,0 +1,90 @@
+/* 按钮与图标按钮层：承接主题内所有可点击胶囊按钮、圆形图标按钮和按钮行布局。 */
+
+.seltheme-pill-row,
+.seltheme-action-row,
+.seltheme-icon-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.seltheme-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  padding: 0 26px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--seltheme-text);
+  background: transparent;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.seltheme-button.small {
+  min-height: 46px;
+  padding: 0 18px;
+  font-size: 14px;
+}
+
+.seltheme-button.primary {
+  box-shadow: var(--seltheme-shadow-soft), inset 0 0 0 1px rgba(196, 242, 248, 0.9);
+  background:
+    linear-gradient(180deg, rgba(232, 255, 253, 0.95), rgba(203, 242, 238, 0.54)),
+    radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.98), transparent 48%);
+}
+
+.seltheme-button.secondary {
+  box-shadow: var(--seltheme-shadow-soft), inset 0 0 0 1px rgba(239, 235, 228, 0.92);
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.94), rgba(239, 234, 226, 0.56)),
+    radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.98), transparent 48%);
+}
+
+.seltheme-button.search {
+  box-shadow: 0 18px 42px rgba(223, 173, 114, 0.22), inset 0 0 0 1px rgba(255, 221, 182, 0.92);
+  background:
+    linear-gradient(180deg, rgba(255, 247, 234, 0.96), rgba(255, 224, 180, 0.58)),
+    radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.98), transparent 48%);
+}
+
+.seltheme-button.upgrade {
+  box-shadow: var(--seltheme-shadow-soft), inset 0 0 0 1px rgba(207, 213, 255, 0.92);
+  background:
+    linear-gradient(180deg, rgba(242, 241, 255, 0.96), rgba(217, 220, 255, 0.58)),
+    radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.98), transparent 48%);
+}
+
+.seltheme-button.ghost {
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+.seltheme-button:hover,
+.seltheme-icon-button:hover {
+  transform: translateY(-1px);
+}
+
+.seltheme-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 62px;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 22px;
+  color: var(--seltheme-text);
+  background: transparent;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.seltheme-icon-button svg {
+  width: 22px;
+  height: 22px;
+  opacity: 0.84;
+}

@@ -1,0 +1,141 @@
+/* 浮层与展示层：承接气泡提示、统计卡、升级卡、展示卡和响应式展示布局。 */
+
+.seltheme-note-bubble {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  min-height: 132px;
+  padding: 22px;
+  border-radius: 28px;
+}
+
+.seltheme-note-bubble::before {
+  position: absolute;
+  left: 28px;
+  bottom: -14px;
+  width: 28px;
+  height: 28px;
+  border-left: 1px solid rgba(255, 255, 255, 0.62);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.62);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.22));
+  transform: rotate(-30deg) skewX(-8deg);
+  content: '';
+}
+
+.seltheme-note-title {
+  font-weight: 700;
+}
+
+.seltheme-side-card {
+  display: grid;
+  gap: 14px;
+}
+
+.seltheme-side-card h3,
+.seltheme-section h3,
+.seltheme-section h4,
+.seltheme-showcase-card h4 {
+  margin: 0;
+}
+
+.seltheme-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.seltheme-metric {
+  display: grid;
+  gap: 6px;
+  min-height: 110px;
+  align-content: start;
+  padding: 18px;
+  border-radius: var(--seltheme-radius-xl);
+}
+
+.seltheme-metric strong {
+  font-size: 32px;
+}
+
+.seltheme-metric span {
+  color: var(--seltheme-muted);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.seltheme-section-grid {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: 1.1fr 1fr;
+}
+
+.seltheme-section {
+  display: grid;
+  gap: 18px;
+}
+
+.seltheme-showcase-card {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+  border-radius: var(--seltheme-radius-xl);
+}
+
+.seltheme-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.seltheme-pricing {
+  display: grid;
+  gap: 18px;
+  align-content: end;
+}
+
+.seltheme-pricing-card {
+  display: grid;
+  gap: 12px;
+  min-height: 260px;
+  padding: 24px;
+  border-radius: 34px;
+}
+
+.seltheme-pricing-card p {
+  margin: 0;
+  color: var(--seltheme-muted);
+  line-height: 1.6;
+}
+
+.seltheme-price {
+  margin-top: auto;
+  display: grid;
+  gap: 10px;
+}
+
+.seltheme-demo-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--seltheme-muted);
+}
+
+.seltheme-demo-footer strong {
+  color: var(--seltheme-text);
+}
+
+@media (max-width: 1120px) {
+  .seltheme-hero,
+  .seltheme-section-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .seltheme-showcase-grid,
+  .seltheme-metric-grid {
+    grid-template-columns: 1fr;
+  }
+}

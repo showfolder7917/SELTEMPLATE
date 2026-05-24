@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SELTHEME Liquid Glass Interactive Demo</title>
+    <link rel="stylesheet" href="../components.css" />
+    <link rel="stylesheet" href="./styles/demo-shell.css" />
+  </head>
+  <body class="seltheme-page">
+    <div class="seltheme-layout seltheme-demo-shell">
+      <aside id="demo-sidebar-slot" class="seltheme-sidebar"></aside>
+
+      <main class="seltheme-main">
+        <section class="seltheme-glass seltheme-panel seltheme-demo-toolbar">
+          <div>
+            <div class="seltheme-eyebrow">Interactive Preview</div>
+            <h2 class="seltheme-title seltheme-demo-title">可互动毛玻璃 demo</h2>
+            <p class="seltheme-copy">左侧保留主题类表页导航，右侧切换展示页与互动实验页，不再把所有内容长期堆在一个 html 里。</p>
+          </div>
+          <div class="seltheme-demo-actions">
+            <button class="seltheme-button primary" data-action="highlight">Create workspace</button>
+            <button class="seltheme-button secondary" data-action="reset">Reset demo</button>
+          </div>
+        </section>
+
+        <section class="seltheme-demo-tabs">
+          <button class="seltheme-glass seltheme-demo-tab is-active" data-target="showcase">展示页</button>
+          <button class="seltheme-glass seltheme-demo-tab" data-target="playground">互动实验页</button>
+        </section>
+
+        <section id="demo-summary-slot" class="seltheme-glass seltheme-panel seltheme-demo-summary"></section>
+
+        <section id="demo-view-slot" class="seltheme-demo-view-stack"></section>
+      </main>
+    </div>
+
+    <script type="module" src="./scripts/demo-shell.js"></script>
+  </body>
+</html>

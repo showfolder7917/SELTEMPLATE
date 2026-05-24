@@ -1,0 +1,116 @@
+/* preview 专属壳样式：只承接 demo 页的 tab、片段容器和互动态，不回写到通用组件层。 */
+
+.seltheme-demo-shell {
+  align-items: start;
+}
+
+.seltheme-demo-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.seltheme-demo-title {
+  font-size: 28px;
+}
+
+.seltheme-demo-actions,
+.seltheme-demo-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.seltheme-demo-tab,
+.seltheme-demo-nav {
+  border: 0;
+  background: transparent;
+  color: var(--seltheme-text);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.seltheme-demo-tab {
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.seltheme-demo-tab.is-active,
+.seltheme-demo-nav.is-active {
+  box-shadow: var(--seltheme-shadow-soft), inset 0 0 0 1px rgba(196, 242, 248, 0.9);
+  background:
+    linear-gradient(180deg, rgba(232, 255, 253, 0.95), rgba(203, 242, 238, 0.54)),
+    radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.98), transparent 48%);
+}
+
+.seltheme-demo-tab:hover,
+.seltheme-demo-nav:hover {
+  transform: translateY(-1px);
+}
+
+.seltheme-demo-summary {
+  display: grid;
+  gap: 12px;
+}
+
+.seltheme-demo-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.seltheme-demo-summary-item {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border-radius: var(--seltheme-radius-xl);
+}
+
+.seltheme-demo-summary-item span {
+  color: var(--seltheme-muted);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.seltheme-demo-summary-item strong {
+  font-size: 18px;
+}
+
+.seltheme-demo-view-stack {
+  display: grid;
+  gap: 18px;
+}
+
+.seltheme-demo-panel {
+  display: none;
+}
+
+.seltheme-demo-panel.is-active {
+  display: grid;
+  gap: 18px;
+}
+
+.seltheme-demo-live-card {
+  min-height: 150px;
+}
+
+@media (max-width: 1120px) {
+  .seltheme-demo-toolbar {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .seltheme-demo-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .seltheme-demo-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}

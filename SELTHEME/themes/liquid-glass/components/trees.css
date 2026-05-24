@@ -1,0 +1,54 @@
+/* Trees 层：承接权限树、目录树和资源层级浏览组件。 */
+
+.seltheme-tree {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seltheme-tree-child {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 0 18px;
+  padding: 0;
+  list-style: none;
+}
+
+.seltheme-tree-line {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.seltheme-tree-toggle,
+.seltheme-tree-node {
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.54);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.84);
+}
+
+.seltheme-tree-toggle {
+  width: 26px;
+  height: 26px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.seltheme-tree-node {
+  padding: 10px 14px;
+  color: var(--seltheme-text);
+  text-align: left;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.seltheme-tree-node:hover {
+  transform: translateY(-1px);
+}
+
+.seltheme-tree-spacer {
+  display: inline-block;
+  width: 26px;
+}

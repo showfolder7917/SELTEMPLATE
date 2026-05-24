@@ -1,0 +1,185 @@
+/* 表单与选择层：承接输入框、建议面板、复选框、开关和列表类交互组件。 */
+
+.seltheme-input-shell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 0 18px;
+  border-radius: 24px;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.seltheme-input-shell:hover,
+.seltheme-checkbox:hover,
+.seltheme-switch:hover {
+  transform: translateY(-1px);
+}
+
+.seltheme-input-shell input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--seltheme-text);
+  font-size: 15px;
+}
+
+.seltheme-input-shell input::placeholder {
+  color: rgba(104, 119, 122, 0.86);
+}
+
+.seltheme-suggestions {
+  display: grid;
+  gap: 10px;
+}
+
+.seltheme-suggestions ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seltheme-suggestions li,
+.seltheme-list-copy small {
+  color: var(--seltheme-muted);
+}
+
+.seltheme-list-card {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border-radius: var(--seltheme-radius-xl);
+}
+
+.seltheme-list-toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.seltheme-list {
+  display: grid;
+  gap: 10px;
+}
+
+.seltheme-list-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 22px;
+}
+
+.seltheme-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #4c6a5b;
+}
+
+.seltheme-list-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.seltheme-checkbox-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.seltheme-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 999px;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.seltheme-checkbox input {
+  display: none;
+}
+
+.seltheme-checkbox-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.82);
+  color: #4f6658;
+  font-weight: 700;
+}
+
+.seltheme-switch-bank {
+  display: grid;
+  gap: 18px;
+}
+
+.seltheme-switch-shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.seltheme-switch {
+  position: relative;
+  width: 92px;
+  height: 48px;
+  border: 0;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(249, 246, 255, 0.94), rgba(214, 203, 255, 0.58));
+  box-shadow: var(--seltheme-shadow-soft), inset 0 0 0 1px rgba(255, 255, 255, 0.86);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.seltheme-switch::before {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.62));
+  box-shadow: 0 10px 20px rgba(110, 118, 145, 0.2);
+  content: '';
+}
+
+.seltheme-switch[data-state='warm'] {
+  background:
+    linear-gradient(180deg, rgba(255, 247, 236, 0.94), rgba(255, 220, 177, 0.58));
+}
+
+.seltheme-switch[data-state='cool'] {
+  background:
+    linear-gradient(180deg, rgba(238, 255, 255, 0.94), rgba(197, 240, 246, 0.58));
+}
+
+.seltheme-switch[data-state='violet'] {
+  background:
+    linear-gradient(180deg, rgba(244, 239, 255, 0.94), rgba(215, 207, 255, 0.58));
+}
+
+.seltheme-switch[data-active='true']::before {
+  left: 49px;
+}

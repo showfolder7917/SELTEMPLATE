@@ -1,0 +1,79 @@
+<section class="seltheme-demo-panel" data-view="playground">
+  <section class="seltheme-section-grid">
+    <article class="seltheme-glass seltheme-showcase-card">
+      <div class="seltheme-eyebrow">Interactive Form Playground</div>
+      <h3>互动实验页</h3>
+      <p class="seltheme-copy">这里不再只是静态陈列。输入、开关、复选框和按钮会即时反馈到右侧摘要卡，用来证明主题 demo 至少具备最小可互动能力。</p>
+
+      <div class="seltheme-input-shell seltheme-glass">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20" style="opacity: 0.72;">
+          <circle cx="11" cy="11" r="6"></circle>
+          <path d="m20 20-3.5-3.5"></path>
+        </svg>
+        <input id="demo-search-input" type="text" placeholder="Search workspace or member..." />
+        <span class="seltheme-copy">Live input</span>
+      </div>
+
+      <div class="seltheme-checkbox-row">
+        <label class="seltheme-glass seltheme-checkbox">
+          <input id="demo-checkbox-invite" type="checkbox" checked />
+          <span class="seltheme-checkbox-mark">✓</span>
+          <span>Invite member</span>
+        </label>
+        <label class="seltheme-glass seltheme-checkbox">
+          <input id="demo-checkbox-notify" type="checkbox" />
+          <span class="seltheme-checkbox-mark"></span>
+          <span>Push notification</span>
+        </label>
+      </div>
+
+      <div class="seltheme-switch-bank">
+        <div class="seltheme-switch-shell">
+          <span>Workspace mode</span>
+          <button class="seltheme-switch" data-state="cool" data-active="true" data-control="workspace" aria-label="workspace switch"></button>
+        </div>
+        <div class="seltheme-switch-shell">
+          <span>Alert mode</span>
+          <button class="seltheme-switch" data-state="warm" data-active="false" data-control="alert" aria-label="alert switch"></button>
+        </div>
+        <div class="seltheme-switch-shell">
+          <span>Glass depth</span>
+          <button class="seltheme-switch" data-state="violet" data-active="true" data-control="depth" aria-label="depth switch"></button>
+        </div>
+      </div>
+
+      <div class="seltheme-pill-row">
+        <button class="seltheme-button primary" data-action="apply">Apply preview</button>
+        <button class="seltheme-button search" data-action="suggest">Generate suggestion</button>
+      </div>
+    </article>
+
+    <article class="seltheme-glass seltheme-showcase-card">
+      <div class="seltheme-eyebrow">Live Summary</div>
+      <h3>实时摘要卡</h3>
+      <div id="demo-live-card" class="seltheme-glass seltheme-note-bubble seltheme-demo-live-card">
+        <div class="seltheme-note-title" id="demo-live-title">Current mode: Workspace</div>
+        <p class="seltheme-copy" id="demo-live-copy">输入关键字、切换开关或勾选成员邀请，右侧摘要会即时更新。</p>
+      </div>
+
+      <div class="seltheme-metric-grid">
+        <div class="seltheme-glass seltheme-metric">
+          <span>Keyword</span>
+          <strong id="demo-metric-keyword">None</strong>
+        </div>
+        <div class="seltheme-glass seltheme-metric">
+          <span>Invite</span>
+          <strong id="demo-metric-invite">On</strong>
+        </div>
+        <div class="seltheme-glass seltheme-metric">
+          <span>Alert</span>
+          <strong id="demo-metric-alert">Off</strong>
+        </div>
+        <div class="seltheme-glass seltheme-metric">
+          <span>Depth</span>
+          <strong id="demo-metric-depth">Deep</strong>
+        </div>
+      </div>
+    </article>
+  </section>
+</section>

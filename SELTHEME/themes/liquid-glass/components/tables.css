@@ -1,0 +1,44 @@
+/* Tables 层：承接后台列表、日志表和成员表这类结构化数据展示。 */
+
+.seltheme-table-card {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border-radius: var(--seltheme-radius-xl);
+}
+
+.seltheme-table-shell {
+  overflow: auto;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.seltheme-table-shell table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.seltheme-table-shell th,
+.seltheme-table-shell td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(61, 78, 82, 0.08);
+}
+
+.seltheme-table-shell th {
+  color: var(--seltheme-muted);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.seltheme-table-row {
+  transition: background 140ms ease;
+}
+
+.seltheme-table-row:hover,
+.seltheme-table-row.is-active {
+  background: rgba(255, 255, 255, 0.42);
+}
