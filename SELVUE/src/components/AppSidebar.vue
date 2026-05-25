@@ -41,7 +41,10 @@ function openPage(key) {
       </button>
     </nav>
 
-    <div class="sidebar-note glass-panel">
+    <div
+      class="sidebar-note glass-panel"
+      :class="{ 'theme-mode': consoleState.currentPage === 'theme' }"
+    >
       <div class="eyebrow">THIS BUILD</div>
       <h3>当前交付范围</h3>
       <ul>

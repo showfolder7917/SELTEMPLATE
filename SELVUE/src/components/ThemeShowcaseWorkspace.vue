@@ -1,6 +1,6 @@
 <script setup>
 // 主题工作区负责把按钮、表单和浮层按能力分层陈列，并提供最小可操作 demo。
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
 // 页面层把已经整理好的主题分组传进来，工作区只负责展示和交互。
 const props = defineProps({
@@ -43,6 +43,10 @@ const bubbleExpanded = ref(false)
 const metricValue = ref(92)
 // 资料卡的加入月份用于演示卡片状态变动。
 const profileJoined = ref('March 2023')
+// 右键菜单当前高亮动作用于证明菜单项不是静态摆设。
+const contextMenuAction = ref('Open record')
+// tip 当前是否固定展开，用于演示轻提示可以被钉住查看。
+const tipPinned = ref(false)
 // 模态框开关用于演示阻断式浮层。
 const modalOpen = ref(false)
 // Toast 开关用于演示轻提示。
@@ -51,6 +55,14 @@ const toastVisible = ref(false)
 const toastMessage = ref('Theme interaction ready')
 // 延时器句柄用于避免重复触发 toast 时出现残留计时器。
 const toastTimer = ref(null)
+// 左侧目录容器引用用于读取真实滚动状态并驱动可见滚动指示器。
+const themeCatalogRef = ref(null)
+// 目录当前滚动位置用于计算滑块偏移。
+const themeCatalogScrollTop = ref(0)
+// 目录当前可见高度用于计算滑块高度。
+const themeCatalogClientHeight = ref(0)
+// 目录完整内容高度用于判断是否存在溢出。
+const themeCatalogScrollHeight = ref(0)
 
 // Tabs 的固定项模拟工作台里常见的二级内容切换。
 const tabs = ['Overview', 'Members', 'Access']
@@ -58,11 +70,19 @@ const tabs = ['Overview', 'Members', 'Access']
 const radioOptions = ['Workspace', 'Department', 'Guest']
 // 多选组选项用于演示权限或模块批量勾选。
 const checkboxOptions = ['Roles', 'Members', 'Audit']
+// 右键菜单项模拟资源卡和表格行上常见的快捷操作。
+const contextMenuItems = ['Open record', 'Duplicate entry', 'Archive item']
 // 表格示例数据用于证明样例页已经能承接真正的数据浏览交互。
 const tableRows = [
   { id: 'mem-101', name: 'Ava Chen', role: 'Admin', status: 'ACTIVE' },
   { id: 'mem-102', name: 'Noah Lin', role: 'Editor', status: 'ACTIVE' },
   { id: 'mem-103', name: 'Mia Zhou', role: 'Viewer', status: 'DISABLED' }
+]
+// 表格演示数据补充金额和阶段字段，方便展示后台列表型区块的摘要能力。
+const tableDemoRows = [
+  { id: 'ord-440', orderNo: 'SO-440', owner: 'Mika', stage: 'Review', amount: '$12.4k' },
+  { id: 'ord-441', orderNo: 'SO-441', owner: 'Noah', stage: 'Pending', amount: '$8.6k' },
+  { id: 'ord-442', orderNo: 'SO-442', owner: 'Ava', stage: 'Approved', amount: '$16.1k' }
 ]
 // 树结构示例数据用于模拟目录、权限树和资源树的层级操作。
 const treeNodes = [
@@ -110,11 +130,55 @@ const selectedTableRow = computed(() =>
 const interactionSummary = computed(() =>
   `按钮 ${primaryClicks.value} 次 / 页签 ${activeTabLabel.value} / 单选 ${selectedRadio.value} / 多选 ${checkboxSummary.value} / 表格 ${selectedTableRow.value?.name || '空'} / 树 ${selectedTreeNode.value}`
 )
+// 目录存在溢出时才显示固定轨道和滑块，避免无滚动场景出现空装饰。
+const themeCatalogCanScroll = computed(() =>
+  themeCatalogScrollHeight.value > themeCatalogClientHeight.value + 1
+)
+// 滑块高度按可见区域占比计算，并设置最小尺寸保证始终肉眼可见。
+const themeCatalogThumbHeight = computed(() => {
+  if (!themeCatalogCanScroll.value || !themeCatalogScrollHeight.value) {
+    return 0
+  }
+  const ratio = themeCatalogClientHeight.value / themeCatalogScrollHeight.value
+  return Math.max(56, Math.round(themeCatalogClientHeight.value * ratio))
+})
+// 滑块偏移按当前 scrollTop 在可滚区中的占比映射，保证拖动反馈和真实滚动同步。
+const themeCatalogThumbOffset = computed(() => {
+  if (!themeCatalogCanScroll.value) {
+    return 0
+  }
+  const maxScrollTop = themeCatalogScrollHeight.value - themeCatalogClientHeight.value
+  const travel = themeCatalogClientHeight.value - themeCatalogThumbHeight.value
+  if (maxScrollTop <= 0 || travel <= 0) {
+    return 0
+  }
+  return Math.round((themeCatalogScrollTop.value / maxScrollTop) * travel)
+})
+// 固定滚动指示器直接消费行内样式，避免把高度和偏移拆成多段 class。
+const themeCatalogThumbStyle = computed(() => ({
+  height: `${themeCatalogThumbHeight.value}px`,
+  transform: `translateY(${themeCatalogThumbOffset.value}px)`
+}))
+
+// 读取目录的 scrollTop、可见高度和总高度，作为滚动指示器的唯一事实来源。
+function syncThemeCatalogScrollMetrics() {
+  const catalogElement = themeCatalogRef.value
+  if (!catalogElement) {
+    themeCatalogScrollTop.value = 0
+    themeCatalogClientHeight.value = 0
+    themeCatalogScrollHeight.value = 0
+    return
+  }
+  themeCatalogScrollTop.value = catalogElement.scrollTop
+  themeCatalogClientHeight.value = catalogElement.clientHeight
+  themeCatalogScrollHeight.value = catalogElement.scrollHeight
+}
 
 // 点击目录时切换当前分组键，右侧展示区自动跟随刷新。
 function selectSection(sectionKey) {
   activeSectionKey.value = sectionKey
   lastActionLabel.value = `切换到 ${sectionKey} 分组`
+  nextTick(syncThemeCatalogScrollMetrics)
 }
 
 // 通用动作记录器负责同步顶部反馈和 toast 提示。
@@ -208,6 +272,12 @@ function selectTableRow(rowId) {
   recordAction(`表格已选中：${row?.name || rowId}`)
 }
 
+// 右键菜单点击动作后回写当前命中项，模拟资源快捷操作反馈。
+function chooseContextMenuAction(action) {
+  contextMenuAction.value = action
+  recordAction(`右键菜单已触发：${action}`, { withToast: true })
+}
+
 // 判断树分支是否展开，用于控制子节点渲染。
 function isTreeExpanded(nodeKey) {
   return expandedTreeKeys.value.includes(nodeKey)
@@ -234,6 +304,12 @@ function selectTreeNode(label) {
 function toggleBubble() {
   bubbleExpanded.value = !bubbleExpanded.value
   recordAction(`提示气泡已${bubbleExpanded.value ? '展开' : '收起'}`)
+}
+
+// tip 点击后在悬浮提示和钉住查看之间切换，方便验证轻提示状态。
+function toggleTipPin() {
+  tipPinned.value = !tipPinned.value
+  recordAction(`tip 已${tipPinned.value ? '固定' : '收起'}`)
 }
 
 // 指标卡点击后刷新一个新值，模拟概览数据变动。
@@ -297,9 +373,11 @@ function resetDemo() {
   filterIndex.value = 0
   panelSuggestion.value = 'Focus field suggestion'
   selectedTableRowId.value = 'mem-102'
+  contextMenuAction.value = 'Open record'
   expandedTreeKeys.value = ['workspace', 'workspace.members']
   selectedTreeNode.value = 'Workspace / Members / Product'
   bubbleExpanded.value = false
+  tipPinned.value = false
   metricValue.value = 92
   profileJoined.value = 'March 2023'
   modalOpen.value = false
@@ -312,56 +390,60 @@ function resetDemo() {
 }
 
 // 组件卸载时清掉计时器，避免 toast 计时器泄漏到页面外。
+onMounted(() => {
+  // 首次进入主题页后读取一次真实尺寸，保证滚动指示器不会等到用户先滚一下才出现。
+  nextTick(syncThemeCatalogScrollMetrics)
+  // 视口变化会直接改变目录高度约束，因此统一在 resize 后刷新滚动事实。
+  window.addEventListener('resize', syncThemeCatalogScrollMetrics)
+})
+
+// 组件卸载时清掉计时器，避免 toast 计时器泄漏到页面外。
 onBeforeUnmount(() => {
   if (toastTimer.value) {
     window.clearTimeout(toastTimer.value)
   }
+  // 主题页退出时同步移除 resize 监听，避免旧页面实例残留回调。
+  window.removeEventListener('resize', syncThemeCatalogScrollMetrics)
 })
 </script>
 
 <template>
   <section class="theme-workspace">
-    <article class="theme-workspace-hero glass-panel">
-      <div>
-        <div class="eyebrow">SELTHEME SHOWCASE</div>
-        <h3>把主题样例升级成正式分层工作区</h3>
-        <p>
-          左侧保留主题控件分类导航，右侧把 Buttons、Forms、Tabs、Radio、Checkbox、Table、Tree、Overlays 拆成并列层。
-          这样后续再扩按钮、输入框、页签、表格、树和弹层时，不会继续混到一个总类里。
-        </p>
-      </div>
-
-      <div class="theme-workspace-meta">
-        <span class="glass-chip">Buttons</span>
-        <span class="glass-chip">Forms</span>
-        <span class="glass-chip">Tabs</span>
-        <span class="glass-chip">Table</span>
-        <span class="glass-chip">Tree</span>
-        <span class="glass-chip">Overlays</span>
-        <button class="glass-button theme-meta-action" type="button" @click="resetDemo">Reset demo</button>
-      </div>
-    </article>
-
     <div class="theme-workspace-layout">
-      <aside class="theme-catalog glass-panel">
-        <div class="theme-catalog-title">Theme Catalog</div>
-
-        <button
-          v-for="section in sections"
-          :key="section.key"
-          type="button"
-          class="theme-catalog-item"
-          :class="{ active: section.key === activeSection?.key }"
-          @click="selectSection(section.key)"
+      <aside class="theme-catalog-shell glass-panel">
+        <div
+          ref="themeCatalogRef"
+          class="theme-catalog"
+          @scroll="syncThemeCatalogScrollMetrics"
         >
-          <strong>{{ section.label }}</strong>
-          <span>{{ section.desc }}</span>
-        </button>
+          <div class="theme-live-panel glass-panel">
+            <div class="theme-catalog-title">Live State</div>
+            <strong>{{ lastActionLabel }}</strong>
+            <p class="fine-print">{{ interactionSummary }}</p>
+          </div>
 
-        <div class="theme-live-panel glass-panel">
-          <div class="theme-catalog-title">Live State</div>
-          <strong>{{ lastActionLabel }}</strong>
-          <p class="fine-print">{{ interactionSummary }}</p>
+          <div class="theme-catalog-title">Theme Catalog</div>
+
+          <button
+            v-for="section in sections"
+            :key="section.key"
+            type="button"
+            class="theme-catalog-item"
+            :class="{ active: section.key === activeSection?.key }"
+            @click="selectSection(section.key)"
+          >
+            <strong>{{ section.label }}</strong>
+            <span>{{ section.desc }}</span>
+          </button>
+
+          <div class="theme-catalog-brief glass-panel">
+            <div class="theme-catalog-title">Workspace Scope</div>
+            <p class="fine-print">当前主题页聚焦控件分层、交互反馈和目录浏览，不再把说明留到最底部。</p>
+          </div>
+        </div>
+
+        <div v-if="themeCatalogCanScroll" class="theme-catalog-scrollbar" aria-hidden="true">
+          <span class="theme-catalog-scrollbar-thumb" :style="themeCatalogThumbStyle" />
         </div>
       </aside>
 
@@ -375,7 +457,10 @@ onBeforeUnmount(() => {
             </p>
           </div>
 
-          <span class="glass-badge">{{ activeSection.samples.length }} 个样例</span>
+          <div class="theme-gallery-actions">
+            <span class="glass-badge">{{ activeSection.samples.length }} 个样例</span>
+            <button class="glass-button theme-gallery-reset" type="button" @click="resetDemo">Reset demo</button>
+          </div>
         </header>
 
         <div class="theme-gallery-grid">
@@ -536,6 +621,48 @@ onBeforeUnmount(() => {
                 <div class="fine-print">当前选中：{{ selectedTableRow.name }} / {{ selectedTableRow.role }}</div>
               </div>
 
+              <div v-else-if="sample.kind === 'table-demo'" class="theme-demo-data-card theme-demo-table-demo">
+                <div class="theme-demo-table-toolbar">
+                  <div>
+                    <strong>Q2 Orders</strong>
+                    <p class="fine-print">3 pending actions · Revenue watch</p>
+                  </div>
+                  <button type="button" class="theme-demo-mini-action" @click="recordAction('表格演示已刷新', { withToast: true })">
+                    Refresh
+                  </button>
+                </div>
+                <div class="table-shell">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Order</th>
+                        <th>Owner</th>
+                        <th>Stage</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="row in tableDemoRows"
+                        :key="row.id"
+                        class="table-row"
+                        @click="recordAction(`表格演示已查看：${row.orderNo}`)"
+                      >
+                        <td>{{ row.orderNo }}</td>
+                        <td>{{ row.owner }}</td>
+                        <td>{{ row.stage }}</td>
+                        <td>{{ row.amount }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="theme-demo-table-summary">
+                  <span class="glass-chip">3 Rows</span>
+                  <span class="glass-chip">1 Escalation</span>
+                  <span class="glass-chip">12h SLA</span>
+                </div>
+              </div>
+
               <div v-else-if="sample.kind === 'tree'" class="theme-demo-data-card theme-demo-tree">
                 <ul class="theme-tree">
                   <li v-for="node in treeNodes" :key="node.key">
@@ -587,6 +714,36 @@ onBeforeUnmount(() => {
                   </li>
                 </ul>
                 <div class="fine-print">当前节点：{{ selectedTreeNode }}</div>
+              </div>
+
+              <div v-else-if="sample.kind === 'tip'" class="theme-demo-tip-card">
+                <button type="button" class="theme-demo-tip-anchor" @click="toggleTipPin">
+                  Hover hint
+                </button>
+                <div class="theme-demo-tip-bubble" :class="{ pinned: tipPinned }">
+                  <strong>Tip</strong>
+                  <p class="fine-print">把轻提示单独拆出来，方便字段说明、快捷说明和只读规则提示。</p>
+                </div>
+              </div>
+
+              <div v-else-if="sample.kind === 'context-menu'" class="theme-demo-context-card">
+                <div class="theme-demo-context-target">
+                  <strong>Project Row</strong>
+                  <span class="fine-print">Right click actions</span>
+                </div>
+                <div class="theme-demo-context-menu">
+                  <button
+                    v-for="action in contextMenuItems"
+                    :key="action"
+                    type="button"
+                    class="theme-demo-context-item"
+                    :class="{ active: contextMenuAction === action }"
+                    @click="chooseContextMenuAction(action)"
+                  >
+                    {{ action }}
+                  </button>
+                </div>
+                <div class="fine-print">当前动作：{{ contextMenuAction }}</div>
               </div>
 
               <button

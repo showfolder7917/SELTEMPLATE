@@ -82,7 +82,10 @@ export const THEME_SHOWCASE_SECTIONS = [
     desc: '表格样例',
     hero: '把表格从其他数据控件中拆开，方便列表页、日志页和后台管理页单独复用和验证。',
     samples: [
-      { key: 'table', label: 'Data Table', preview: 'Workspace members', tone: 'cyan', kind: 'table', desc: '表格样例用于展示成员、订单、日志等结构化数据。' }
+      // 基础数据表用于展示标准列表浏览和行选中反馈。
+      { key: 'table', label: 'Data Table', preview: 'Workspace members', tone: 'cyan', kind: 'table', desc: '表格样例用于展示成员、订单、日志等结构化数据。' },
+      // 表格演示补一张带摘要和批量动作的卡，方便单独观察后台表格区块。
+      { key: 'table-demo', label: 'Table Demo', preview: 'Orders dashboard', tone: 'mint', kind: 'table-demo', desc: '表格演示适合承接订单、审批和批量操作列表。' }
     ]
   },
   {
@@ -100,6 +103,11 @@ export const THEME_SHOWCASE_SECTIONS = [
     desc: '卡片、提示和展示浮层样例',
     hero: '把展示型组件提升到独立浮层层级，方便概览卡、提示层和升级卡统一复用。',
     samples: [
+      // tip 单独保留在浮层层，承接短提示和悬浮说明场景。
+      { key: 'tip', label: 'Tip', preview: 'Hover or pin tip', tone: 'cyan', kind: 'tip', desc: 'tip 适合字段说明、轻提示和局部引导。' },
+      // 右键菜单样例用于评估列表行和资源卡的操作菜单密度。
+      { key: 'context-menu', label: 'Context Menu', preview: 'Quick row actions', tone: 'mint', kind: 'context-menu', desc: '右键菜单适合列表行、资源卡和树节点的快捷操作。' },
+      // 展示气泡继续保留，作为长说明型提示卡。
       { key: 'bubble', label: 'Speech Bubble', preview: 'Liquid glass tip', tone: 'cyan', kind: 'bubble', desc: '提示气泡适合承接弱提示、指导语和局部说明。' },
       { key: 'stats', label: 'Metric Card', preview: 'Upgrade plan', tone: 'mint', kind: 'stat', desc: '指标卡适合总量、占比和状态概览展示。' },
       { key: 'profile', label: 'Profile Card', preview: 'User info', tone: 'amber', kind: 'profile', desc: '资料卡适合用户概览、成员名片和详情摘要。' },

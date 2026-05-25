@@ -5,6 +5,7 @@
 @import './components/tables.css';
 @import './components/trees.css';
 @import './components/overlays.css';
+@import './components/admin-adapter.css';
 
 .seltheme-glass {
   position: relative;

@@ -19,6 +19,7 @@ dist/
 build/
 .gradle/
 test-results/
+bin/
 
 # Generated images
 *.png
